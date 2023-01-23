@@ -15,7 +15,7 @@ export const HeroCard = ({ id, superhero, publisher, alter_ego, first_appearance
     const heroImage = `/assets/heroes/${ id }.jpg`;
 
     return(
-        <div className="col animate__animated animate__fadeIn">
+        <div className="col animate__animated animate__fadeIn mt-4">
             <div className="card h-100">
                <div className="row no-gutters">
                     <div className="col-4">
