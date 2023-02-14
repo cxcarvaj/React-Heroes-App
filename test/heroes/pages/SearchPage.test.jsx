@@ -1,9 +1,21 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { SearchPage } from '../../../src/heroes';
 
 
+const mockedUseNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'), 
+    useNavigate: () => mockedUseNavigate,
+}));
+
+
 describe('Test in <SearchPage />', () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
     test('should show correctly with default values', () => {
 
@@ -39,8 +51,40 @@ describe('Test in <SearchPage />', () => {
 
         expect( alertSearchHero.style.display ).toBe('none');
         expect( alertNoHero.style.display ).toBe('none');
+
+    });
+
+    test('should show an error if the hero does not exist', () => {
+
+        render(
+            <MemoryRouter initialEntries={['/search?q=batman123']}>
+                <SearchPage />
+            </MemoryRouter>
+        );
+
+        const alertNoHero = screen.getByLabelText('alert-no-hero');
+
+        expect( alertNoHero.style.display ).not.toBe('none');
+
+    });
+
+    test('should call the push of history', () => {
+        render(
+            <MemoryRouter initialEntries={['/search?q=batman123']}>
+                <SearchPage />
+            </MemoryRouter>
+        );
+
+        const input = screen.getByRole('textbox');
         
-        screen.debug();
+        fireEvent.change( input, { target: { name: 'searchText', value: 'flash' } } );
+
+        const form = screen.getByRole('form');
+
+        fireEvent.submit( form );
+
+        expect( mockedUseNavigate ).toHaveBeenCalled();
+        expect( mockedUseNavigate ).toHaveBeenCalledWith('?q=flash');
 
     });
 
