@@ -59,12 +59,12 @@ export const SearchPage = () => {
                     <h4>Results</h4>
                     <hr />
 
-                    <div className="alert alert-primary animate__animated animate__fadeIn animate__fast" 
+                    <div className="alert alert-primary animate__animated animate__fadeIn animate__fast" aria-label='alert-search-hero' 
                         style={{ display: showSearch ? '' : 'none' }}>
                         Search a hero
                     </div>
 
-                    <div className="alert alert-danger animate__animated animate__fadeIn animate__fast" 
+                    <div className="alert alert-danger animate__animated animate__fadeIn animate__fast" aria-label='alert-no-hero'
                         style={{ display: showError ? '' : 'none' }}>
                         No hero with <b>{ q }</b>
                     </div>
