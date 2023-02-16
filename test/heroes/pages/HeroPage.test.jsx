@@ -2,56 +2,47 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HeroPage } from '../../../src/heroes';
 
-
 const mockedUseNavigate = jest.fn();
 const mockedUseParams = jest.fn();
 
 jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'), 
-    useNavigate: () => mockedUseNavigate,
-    useParams: () => ({
-        id: 'marvel-iron'
-    }),
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedUseNavigate,
+  useParams: () => ({
+    id: 'marvel-iron'
+  })
 }));
 
-
 describe('Test in <HeroPage />', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+  test('should show Iron Man info', () => {
+    render(
+      <MemoryRouter initialEntries={['/hero/marvel-iron']}>
+        <HeroPage />
+      </MemoryRouter>
+    );
 
-    test('should show Iron Man info', () => {
+    expect(screen.getByText('Iron Man')).toBeTruthy();
 
-        render(
-            <MemoryRouter initialEntries={['/hero/marvel-iron']}>
-                <HeroPage />
-            </MemoryRouter>
-        );
+    const img = screen.getByRole('img');
 
-        expect( screen.getByText('Iron Man') ).toBeTruthy();
+    expect(img.src).toContain('/assets/heroes/marvel-iron.jpg');
+  });
 
-        const img = screen.getByRole('img');
+  test('should go back when click on the Return button', () => {
+    render(
+      <MemoryRouter initialEntries={['/hero/marvel-iron']}>
+        <HeroPage />
+      </MemoryRouter>
+    );
 
-        expect( img.src ).toContain('/assets/heroes/marvel-iron.jpg');
+    const button = screen.getByRole('button');
 
-    });
+    fireEvent.click(button);
 
-
-    test('should go back when click on the Return button', () => {
-
-        render(
-            <MemoryRouter initialEntries={['/hero/marvel-iron']}>
-                <HeroPage />
-            </MemoryRouter>
-        );
-
-        const button = screen.getByRole('button');
-        
-        fireEvent.click(button);
-
-        expect( mockedUseNavigate ).toHaveBeenCalled();
-
-    });
-
+    expect(mockedUseNavigate).toHaveBeenCalled();
+  });
 });

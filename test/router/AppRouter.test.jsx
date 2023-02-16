@@ -4,46 +4,39 @@ import { AuthContext } from '../../src/auth';
 import { AppRouter } from '../../src/router/AppRouter';
 
 describe('Tests in <AppRouter />', () => {
+  test('should show the login if is not authenticated', () => {
+    const contextValue = {
+      logged: false
+    };
 
-    test('should show the login if is not authenticated', () => {
+    render(
+      <MemoryRouter initialEntries={['/marvel']}>
+        <AuthContext.Provider value={contextValue}>
+          <AppRouter />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    );
 
-        const contextValue = {
-            logged: false,
-        };
+    expect(screen.getAllByText('Login').length).toBeGreaterThan(0);
+  });
 
-        render(
-            <MemoryRouter initialEntries={['/marvel']}>
-                <AuthContext.Provider value={contextValue}>
-                    <AppRouter />
-                </AuthContext.Provider>
-            </MemoryRouter>
-        );
+  test('should show the marvel page if is authenticated', () => {
+    const contextValue = {
+      logged: true,
+      user: {
+        name: 'Carlos_Tester',
+        id: 123
+      }
+    };
 
-        expect(screen.getAllByText('Login').length).toBeGreaterThan(0);
+    render(
+      <MemoryRouter initialEntries={['/login']}>
+        <AuthContext.Provider value={contextValue}>
+          <AppRouter />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    );
 
-    });
-
-    test('should show the marvel page if is authenticated', () => {
-
-
-        const contextValue = {
-            logged: true,
-            user: {
-                name: 'Carlos_Tester',
-                id: 123,
-            },
-        };
-
-        render(
-            <MemoryRouter initialEntries={['/login']}>
-                <AuthContext.Provider value={contextValue}>
-                    <AppRouter />
-                </AuthContext.Provider>
-            </MemoryRouter>
-        );
-
-        expect(screen.getByText('Marvel Comics')).toBeTruthy();
-    });
-
-
+    expect(screen.getByText('Marvel Comics')).toBeTruthy();
+  });
 });

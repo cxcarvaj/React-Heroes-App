@@ -9,7 +9,9 @@ In the project directory, you can run:
 ### `yarn dev`
 
 To run the app in the development mode.\
+
 <!-- Open [http://localhost:3000](http://localhost:3000) to view it in the browser. -->
+
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
@@ -25,7 +27,6 @@ Your app is ready to be deployed!
 
 To run all the unit tests in this project.
 
-
 ### `yarn test:watch`
 
 To run all the unit test and watch files for changes and rerun tests related to changed files. -->
@@ -33,3 +34,5 @@ To run all the unit test and watch files for changes and rerun tests related to 
 ## Important Information
 
 [Installation and configuration of Jest + React Testing Library](https://gist.github.com/cxcarvaj/427aec0c9ed5e8b61657114b595355f0)
+
+[Installation and configuration of ESlint + Prettier in a React Project](https://gist.github.com/cxcarvaj/baa39983664196a46171bf0010543bae)

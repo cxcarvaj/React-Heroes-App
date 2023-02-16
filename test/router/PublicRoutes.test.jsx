@@ -4,53 +4,49 @@ import { AuthContext } from '../../src/auth';
 import { PublicRoute } from '../../src/router/PublicRoute';
 
 describe('Tests in <PublicRoutes />', () => {
+  test('should show the children if is not authenticated', () => {
+    const contextValue = {
+      logged: false
+    };
 
-    test('should show the children if is not authenticated', () => {
+    render(
+      <AuthContext.Provider value={contextValue}>
+        <PublicRoute>
+          <span>Public Route</span>
+        </PublicRoute>
+      </AuthContext.Provider>
+    );
 
-        const contextValue = {
-            logged: false,
-        };
+    expect(screen.getByText('Public Route')).toBeTruthy();
+  });
 
-        render(
-            <AuthContext.Provider value={contextValue}>
+  test('should show the children if is authenticated', () => {
+    const contextValue = {
+      logged: true,
+      user: {
+        name: 'Carlos_Tester',
+        id: 123
+      }
+    };
+
+    render(
+      <AuthContext.Provider value={contextValue}>
+        <MemoryRouter initialEntries={['/login']}>
+          <Routes>
+            <Route
+              path="/login"
+              element={
                 <PublicRoute>
-                    <span>Public Route</span>
+                  <h1>Public Route</h1>
                 </PublicRoute>
-            </AuthContext.Provider>
-        );
+              }
+            />
+            <Route path="/marvel" element={<h1>Marvel Page</h1>} />
+          </Routes>
+        </MemoryRouter>
+      </AuthContext.Provider>
+    );
 
-        expect( screen.getByText('Public Route') ).toBeTruthy();
-
-    });
-
-    test('should show the children if is authenticated', () => {
-
-        const contextValue = {
-            logged: true,
-            user: {
-                name: 'Carlos_Tester',
-                id: 123,
-            }
-        };
-
-        render(
-            <AuthContext.Provider value={contextValue}>
-                <MemoryRouter initialEntries={['/login']}>
-                    <Routes>
-                        <Route path='/login' element = {
-                            <PublicRoute>
-                                <h1>Public Route</h1>
-                            </PublicRoute>
-                        } />
-                        <Route path='/marvel' element = { <h1>Marvel Page</h1> } />
-                    </Routes>
-                </MemoryRouter>
-            </AuthContext.Provider>
-        );
-
-        expect( screen.getByText('Marvel Page') ).toBeTruthy();
-
-    });
-
-
+    expect(screen.getByText('Marvel Page')).toBeTruthy();
+  });
 });
